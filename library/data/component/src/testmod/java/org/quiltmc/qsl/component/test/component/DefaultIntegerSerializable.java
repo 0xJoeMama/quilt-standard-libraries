@@ -20,7 +20,7 @@ import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtInt;
 import net.minecraft.network.PacketByteBuf;
 import org.jetbrains.annotations.Nullable;
-import org.quiltmc.qsl.component.api.ComponentCreationContext;
+
 import org.quiltmc.qsl.component.api.component.NbtSerializable;
 import org.quiltmc.qsl.component.api.component.Syncable;
 

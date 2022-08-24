@@ -25,21 +25,15 @@ import net.fabricmc.api.Environment;
 
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.util.collection.IdList;
 
-import org.quiltmc.qsl.component.api.ComponentType;
-import org.quiltmc.qsl.component.api.Components;
 import org.quiltmc.qsl.component.api.sync.SyncChannel;
 import org.quiltmc.qsl.component.impl.ComponentsImpl;
-import org.quiltmc.qsl.component.impl.sync.packet.PacketIds;
-import org.quiltmc.qsl.networking.api.client.ClientLoginNetworking;
 import org.quiltmc.qsl.networking.api.client.ClientPlayNetworking;
 
 @Environment(EnvType.CLIENT)
 public final class ClientSyncHandler {
 	private static ClientSyncHandler INSTANCE = null;
 	private final Queue<Pair<SyncChannel<?, ?>, PacketByteBuf>> queue = new ArrayDeque<>();
-	private IdList<ComponentType<?>> componentList = null;
 	private boolean frozen = true;
 
 	private ClientSyncHandler() { }
@@ -65,15 +59,7 @@ public final class ClientSyncHandler {
 	}
 
 	public void registerPackets() {
-		ClientLoginNetworking.registerGlobalReceiver(PacketIds.TYPES, (client, handler, buf, listenerAdder) ->
-				ClientRegistryPacket.handleRegistryPacket(buf, Components.REGISTRY, list -> this.componentList = list)
-		);
-
 		SyncChannel.createPacketChannels(this::registerChannel);
-	}
-
-	public ComponentType<?> getType(int rawId) {
-		return this.componentList.get(rawId);
 	}
 
 	public void unfreeze() {

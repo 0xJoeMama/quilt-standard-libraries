@@ -46,7 +46,7 @@ import net.minecraft.world.chunk.WorldChunk;
 
 import org.quiltmc.qsl.component.api.ComponentType;
 import org.quiltmc.qsl.component.api.component.Syncable;
-import org.quiltmc.qsl.component.api.provider.ComponentProvider;
+import org.quiltmc.qsl.component.api.ComponentProvider;
 import org.quiltmc.qsl.component.api.sync.codec.NetworkCodec;
 import org.quiltmc.qsl.component.impl.client.sync.ClientResolution;
 import org.quiltmc.qsl.component.impl.sync.packet.PacketIds;

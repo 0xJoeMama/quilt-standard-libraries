@@ -24,11 +24,5 @@ public interface Syncable {
 
 	void readFromBuf(PacketByteBuf buf);
 
-	@Nullable Runnable getSyncOperation();
-
-	default void sync() {
-		if (this.getSyncOperation() != null) {
-			this.getSyncOperation().run();
-		}
-	}
+	boolean needsSync();
 }

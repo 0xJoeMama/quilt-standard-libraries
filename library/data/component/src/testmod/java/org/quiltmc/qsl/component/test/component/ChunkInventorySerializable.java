@@ -24,7 +24,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.collection.DefaultedList;
 
-import org.quiltmc.qsl.component.api.ComponentCreationContext;
 import org.quiltmc.qsl.component.api.component.Syncable;
 import org.quiltmc.qsl.component.api.sync.codec.NetworkCodec;
 

@@ -29,12 +29,12 @@ import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.util.registry.SimpleRegistry;
 
+import org.quiltmc.qsl.component.api.ComponentProvider;
 import org.quiltmc.qsl.component.api.ComponentType;
 import org.quiltmc.qsl.component.api.container.ComponentContainer;
 import org.quiltmc.qsl.component.api.injection.ComponentEntry;
 import org.quiltmc.qsl.component.api.injection.predicate.DynamicInjectionPredicate;
 import org.quiltmc.qsl.component.api.injection.predicate.InjectionPredicate;
-import org.quiltmc.qsl.component.api.provider.ComponentProvider;
 import org.quiltmc.qsl.component.impl.injection.manager.cached.CachedInjectionManager;
 import org.quiltmc.qsl.component.impl.injection.manager.dynamic.DynamicInjectionManager;
 
@@ -42,17 +42,18 @@ import org.quiltmc.qsl.component.impl.injection.manager.dynamic.DynamicInjection
 public class ComponentsImpl {
 	public static final RegistryKey<Registry<ComponentType<?>>> REGISTRY_KEY =
 			RegistryKey.ofRegistry(CommonInitializer.id("component_types"));
-	public static final Registry<ComponentType<?>> REGISTRY = // TODO: Register this, maybe?!
+	public static final SimpleRegistry<ComponentType<?>> REGISTRY =
 			new SimpleRegistry<>(REGISTRY_KEY, Lifecycle.experimental(), null);
 
 	public static final CachedInjectionManager CACHED_MANAGER = new CachedInjectionManager();
 	public static final DynamicInjectionManager DYNAMIC_MANAGER = new DynamicInjectionManager();
 
 	public static final Logger LOGGER = LoggerFactory.getLogger("Quilt Component");
-	public static final ComponentContainer.Factory<?> DEFAULT_FACTORY = (provider, entries, saveOperation, ticking, syncChannel) ->
-			entries.isEmpty() ?
-			ComponentContainer.EMPTY :
-			ComponentContainer.LAZY_FACTORY.generate(provider, entries, saveOperation, ticking, syncChannel);
+	public static final ComponentContainer.Factory<?> DEFAULT_FACTORY =
+			(provider, entries, saveOperation, ticking, syncChannel) ->
+					entries.isEmpty() ?
+					ComponentContainer.EMPTY :
+					ComponentContainer.LAZY_FACTORY.generate(provider, entries, saveOperation, ticking, syncChannel);
 
 	public static void inject(InjectionPredicate predicate, ComponentEntry<?>... entries) {
 		if (predicate instanceof DynamicInjectionPredicate dynamicPredicate) {

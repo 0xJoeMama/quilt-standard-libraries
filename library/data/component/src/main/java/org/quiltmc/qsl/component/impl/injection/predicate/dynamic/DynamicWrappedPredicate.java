@@ -20,7 +20,7 @@ import java.util.function.Predicate;
 
 import org.quiltmc.qsl.component.api.injection.predicate.DynamicInjectionPredicate;
 import org.quiltmc.qsl.component.api.injection.predicate.InjectionPredicate;
-import org.quiltmc.qsl.component.api.provider.ComponentProvider;
+import org.quiltmc.qsl.component.api.ComponentProvider;
 
 public class DynamicWrappedPredicate<P extends ComponentProvider> implements DynamicInjectionPredicate {
 	private final InjectionPredicate wrapped;

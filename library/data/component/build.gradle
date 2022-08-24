@@ -13,6 +13,7 @@ qslModule {
 			api("qsl_base")
 			impl("lifecycle_events")
 			impl("networking")
+			impl("registry")
 			testmodOnly("registry") // Required by block_entity
 		}
 
@@ -34,28 +35,28 @@ qslModule {
 	// accessWidener()
 
 	injectedInterface("net/minecraft/class_2586") { // BlockEntity
-		values = ["org/quiltmc/qsl/component/api/provider/ComponentProvider"]
+		values = ["org/quiltmc/qsl/component/api/ComponentProvider"]
 	}
 
 	injectedInterface("net/minecraft/class_1297") { // Entity
-		values = ["org/quiltmc/qsl/component/api/provider/ComponentProvider"]
+		values = ["org/quiltmc/qsl/component/api/ComponentProvider"]
 	}
 
-	injectedInterface("net/minecraft/class_2791") { // Chunk
-		values = ["org/quiltmc/qsl/component/api/provider/ComponentProvider"]
-	}
-
-	injectedInterface("net/minecraft/class_310") { // MinecraftClient
-		values = ["org/quiltmc/qsl/component/api/provider/ComponentProvider"]
-	}
-
-	injectedInterface("net/minecraft/server/MinecraftServer") { // MinecraftServer
-		values = ["org/quiltmc/qsl/component/api/provider/ComponentProvider"]
-	}
-
-	injectedInterface("net/minecraft/class_1937") { // World
-		values = ["org/quiltmc/qsl/component/api/provider/ComponentProvider"]
-	}
+//	injectedInterface("net/minecraft/class_2791") { // Chunk
+//		values = ["org/quiltmc/qsl/component/api/ComponentProvider"]
+//	}
+//
+//	injectedInterface("net/minecraft/class_310") { // MinecraftClient
+//		values = ["org/quiltmc/qsl/component/api/ComponentProvider"]
+//	}
+//
+//	injectedInterface("net/minecraft/server/MinecraftServer") { // MinecraftServer
+//		values = ["org/quiltmc/qsl/component/api/ComponentProvider"]
+//	}
+//
+//	injectedInterface("net/minecraft/class_1937") { // World
+//		values = ["org/quiltmc/qsl/component/api/ComponentProvider"]
+//	}
 }
 
 loom {

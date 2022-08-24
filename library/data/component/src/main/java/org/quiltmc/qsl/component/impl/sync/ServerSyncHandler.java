@@ -18,9 +18,6 @@ package org.quiltmc.qsl.component.impl.sync;
 
 import org.quiltmc.qsl.component.api.sync.SyncChannel;
 import org.quiltmc.qsl.component.impl.ComponentsImpl;
-import org.quiltmc.qsl.component.impl.sync.packet.PacketIds;
-import org.quiltmc.qsl.component.impl.sync.packet.RegistryPacket;
-import org.quiltmc.qsl.networking.api.ServerLoginNetworking;
 import org.quiltmc.qsl.networking.api.ServerPlayNetworking;
 
 public final class ServerSyncHandler {
@@ -44,10 +41,6 @@ public final class ServerSyncHandler {
 	}
 
 	public void registerPackets() {
-		ServerLoginNetworking.registerGlobalReceiver(PacketIds.TYPES, (server, handler, understood, buf, sync, sender) ->
-				RegistryPacket.handleRegistryResponse(buf, handler, "Component with id %s was not found in the client!")
-		);
-
 		SyncChannel.createPacketChannels(this::registerChannel);
 	}
 }

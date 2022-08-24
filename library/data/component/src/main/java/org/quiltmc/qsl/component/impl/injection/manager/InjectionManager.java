@@ -30,7 +30,7 @@ import net.minecraft.util.Util;
 import org.quiltmc.qsl.component.api.Components;
 import org.quiltmc.qsl.component.api.injection.ComponentEntry;
 import org.quiltmc.qsl.component.api.injection.predicate.InjectionPredicate;
-import org.quiltmc.qsl.component.api.provider.ComponentProvider;
+import org.quiltmc.qsl.component.api.ComponentProvider;
 import org.quiltmc.qsl.component.impl.util.ErrorUtil;
 
 public abstract class InjectionManager<P extends InjectionPredicate, I> {
@@ -44,7 +44,7 @@ public abstract class InjectionManager<P extends InjectionPredicate, I> {
 			var type = entry.type();
 
 			if (Components.REGISTRY.get(type.id()) == null) {
-				throw ErrorUtil.illegalArgument("The target id %s does not match any registered component", type).get();
+				throw ErrorUtil.illegalArgument("The target id %s does not match any registered component", type);
 			}
 		}
 
@@ -71,7 +71,7 @@ public abstract class InjectionManager<P extends InjectionPredicate, I> {
 	protected void record(Class<?> providerClass, List<I> injections) {
 		if (this.cache.put(providerClass, Util.make(new ArrayList<>(), list -> list.addAll(injections))) != null) {
 			// If there was a value there, it means we attempted an override, and so we throw.
-			throw ErrorUtil.illegalArgument("Cannot register cache twice for class %s", providerClass).get();
+			throw ErrorUtil.illegalArgument("Cannot register cache twice for class %s", providerClass);
 		}
 	}
 }

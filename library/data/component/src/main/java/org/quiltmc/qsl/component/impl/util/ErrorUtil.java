@@ -19,7 +19,7 @@ package org.quiltmc.qsl.component.impl.util;
 import java.util.function.Supplier;
 
 public class ErrorUtil {
-	public static Supplier<IllegalArgumentException> illegalArgument(String message, Object... args) {
+	public static IllegalArgumentException illegalArgument(String message, Object... args) {
 		return () -> new IllegalArgumentException(message.formatted(args));
 	}
 
@@ -27,7 +27,7 @@ public class ErrorUtil {
 		return () -> new IllegalStateException(message);
 	}
 
-	public static Supplier<RuntimeException> runtime(String msg, Object... formattingArguments) {
-		return () -> new RuntimeException(msg.formatted(formattingArguments));
+	public static RuntimeException runtime(String msg, Object... formattingArguments) {
+		return new RuntimeException(msg.formatted(formattingArguments));
 	}
 }

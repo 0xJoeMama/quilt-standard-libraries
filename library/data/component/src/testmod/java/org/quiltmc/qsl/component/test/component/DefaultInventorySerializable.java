@@ -24,8 +24,6 @@ import org.jetbrains.annotations.Nullable;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.collection.DefaultedList;
 
-import org.quiltmc.qsl.component.api.ComponentCreationContext;
-
 public class DefaultInventorySerializable implements InventorySerializable {
 	private final DefaultedList<ItemStack> stacks;
 	@Nullable

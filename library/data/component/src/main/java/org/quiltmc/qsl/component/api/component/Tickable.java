@@ -16,8 +16,7 @@
 
 package org.quiltmc.qsl.component.api.component;
 
-import org.quiltmc.qsl.component.api.provider.ComponentProvider;
-
+// TODO: Possibly remove this
 public interface Tickable {
-	void tick(ComponentProvider provider);
+	void tick();
 }

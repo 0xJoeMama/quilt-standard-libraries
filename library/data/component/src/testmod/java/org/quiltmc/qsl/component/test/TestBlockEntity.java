@@ -36,7 +36,6 @@ import net.minecraft.world.World;
 
 import org.quiltmc.qsl.component.api.container.ComponentContainer;
 import org.quiltmc.qsl.component.api.sync.SyncChannel;
-import org.quiltmc.qsl.component.impl.container.SimpleComponentContainer;
 
 public class TestBlockEntity extends BlockEntity {
 	private final ComponentContainer container = ComponentContainer.builder(this)

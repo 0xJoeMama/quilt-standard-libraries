@@ -21,10 +21,9 @@ import org.jetbrains.annotations.Nullable;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.world.ServerWorld;
 
-import org.quiltmc.qsl.component.api.ComponentCreationContext;
 import org.quiltmc.qsl.component.api.component.Syncable;
 import org.quiltmc.qsl.component.api.component.Tickable;
-import org.quiltmc.qsl.component.api.provider.ComponentProvider;
+import org.quiltmc.qsl.component.api.ComponentProvider;
 import org.quiltmc.qsl.component.api.sync.codec.NetworkCodec;
 
 public class SaveFloatSerializable extends DefaultFloatSerializable implements Tickable, Syncable {

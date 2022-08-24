@@ -16,7 +16,7 @@
 
 package org.quiltmc.qsl.component.api.injection.predicate;
 
-import org.quiltmc.qsl.component.api.provider.ComponentProvider;
+import org.quiltmc.qsl.component.api.ComponentProvider;
 
 public interface DynamicInjectionPredicate extends InjectionPredicate {
 	boolean canInject(ComponentProvider provider);

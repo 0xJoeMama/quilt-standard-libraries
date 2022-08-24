@@ -53,8 +53,8 @@
  * The {@link org.quiltmc.qsl.component.api.ComponentType} we have created does exist, but nothing actually exposes it's interface.<br/>
  * For that to happen we need to inject our type into game objects.
  * <p/>
- * Game Objects that can have components injected to them are by convention called {@link org.quiltmc.qsl.component.api.provider.ComponentProvider}s.<br/>
- * The {@linkplain org.quiltmc.qsl.component.api.provider.ComponentProvider providers} implemented by default are the following:
+ * Game Objects that can have components injected to them are by convention called {@link org.quiltmc.qsl.component.api.ComponentProvider}s.<br/>
+ * The {@linkplain org.quiltmc.qsl.component.api.ComponentProvider providers} implemented by default are the following:
  * <ul>
  *     <li>BlockEntity</li>
  *     <li>Entity</li>
@@ -62,7 +62,7 @@
  *     <li>World</li>
  *     <li>Level(meaning a game save)</li>
  * </ul>
- * For more info on {@linkplain org.quiltmc.qsl.component.api.provider.ComponentProvider providers} check the {@linkplain org.quiltmc.qsl.component.api.provider.ComponentProvider relevant documentation}.
+ * For more info on {@linkplain org.quiltmc.qsl.component.api.ComponentProvider providers} check the {@linkplain org.quiltmc.qsl.component.api.ComponentProvider relevant documentation}.
  * <p/>
  *
  * <p>
@@ -84,8 +84,8 @@
  * Now all chests should have {@code AComponent} injected into them, when they are created.
  * <p/>
  * <h2>Accessing Components</h2>
- * For any {@link org.quiltmc.qsl.component.api.provider.ComponentProvider} that has components injected into it, accessing them follows pretty much the same pattern.<br/>
- * You need an instance of the {@link org.quiltmc.qsl.component.api.provider.ComponentProvider} that your component is injected into.<br/>
+ * For any {@link org.quiltmc.qsl.component.api.ComponentProvider} that has components injected into it, accessing them follows pretty much the same pattern.<br/>
+ * You need an instance of the {@link org.quiltmc.qsl.component.api.ComponentProvider} that your component is injected into.<br/>
  * After that you can do this:
  * <pre>{@code
  * //...

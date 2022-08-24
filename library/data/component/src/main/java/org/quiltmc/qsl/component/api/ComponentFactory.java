@@ -16,17 +16,18 @@
 
 package org.quiltmc.qsl.component.api;
 
-/**
- * Class meant to provide a component using the provided {@link ComponentCreationContext} argument.
- *
- * @param <T> The type of the returned component.
- * @author 0xJoeMama
- */
+import org.jetbrains.annotations.NotNull;
+
 @FunctionalInterface
 public interface ComponentFactory<T> {
-	/**
-	 * @param ctx The {@link ComponentCreationContext} that can be used by the component.
-	 * @return A {@link T} instance.
-	 */
-	T create(ComponentCreationContext ctx);
+	@NotNull T create(ComponentProvider provider);
+
+	interface ForGeneric<T, P> extends ComponentFactory<T> {
+		@SuppressWarnings("unchecked")
+		default T create(ComponentProvider provider) {
+			return this.generate((P) provider);
+		}
+
+		T generate(P provider);
+	}
 }

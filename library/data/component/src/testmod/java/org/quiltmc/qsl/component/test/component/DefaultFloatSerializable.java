@@ -21,7 +21,6 @@ import org.jetbrains.annotations.Nullable;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtFloat;
 
-import org.quiltmc.qsl.component.api.ComponentCreationContext;
 import org.quiltmc.qsl.component.api.component.NbtSerializable;
 
 public class DefaultFloatSerializable implements NbtSerializable<NbtFloat> {

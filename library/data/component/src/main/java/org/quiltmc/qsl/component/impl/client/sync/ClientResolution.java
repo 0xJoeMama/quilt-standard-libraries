@@ -27,7 +27,7 @@ import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 
-import org.quiltmc.qsl.component.api.provider.ComponentProvider;
+import org.quiltmc.qsl.component.api.ComponentProvider;
 
 // all of these are called after the client joins a world, so no NPEs will be thrown
 @SuppressWarnings("ConstantConditions")

@@ -19,9 +19,12 @@ package org.quiltmc.qsl.component.impl;
 import org.jetbrains.annotations.ApiStatus;
 
 import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 
 import org.quiltmc.loader.api.ModContainer;
 import org.quiltmc.qsl.base.api.entrypoint.ModInitializer;
+import org.quiltmc.qsl.component.api.ComponentType;
+import org.quiltmc.qsl.component.api.Components;
 import org.quiltmc.qsl.component.impl.event.CommonEventListener;
 import org.quiltmc.qsl.component.impl.event.ComponentEventPhases;
 import org.quiltmc.qsl.component.impl.sync.ServerSyncHandler;
@@ -29,6 +32,7 @@ import org.quiltmc.qsl.lifecycle.api.event.ServerLifecycleEvents;
 import org.quiltmc.qsl.lifecycle.api.event.ServerTickEvents;
 import org.quiltmc.qsl.lifecycle.api.event.ServerWorldTickEvents;
 import org.quiltmc.qsl.networking.api.ServerLoginConnectionEvents;
+import org.quiltmc.qsl.registry.api.sync.RegistrySynchronization;
 
 @ApiStatus.Internal
 public final class CommonInitializer implements ModInitializer {
@@ -38,8 +42,12 @@ public final class CommonInitializer implements ModInitializer {
 		return new Identifier(MOD_ID, id);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void onInitialize(ModContainer mod) {
+		Registry.register((Registry<Registry<?>>) Registry.REGISTRIES, id("components"), Components.REGISTRY);
+		RegistrySynchronization.markForSync(ComponentsImpl.REGISTRY);
+
 		ServerSyncHandler.getInstance().registerPackets();
 
 		ServerLoginConnectionEvents.QUERY_START.register(

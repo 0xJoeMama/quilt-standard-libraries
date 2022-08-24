@@ -21,7 +21,7 @@ import org.jetbrains.annotations.Nullable;
 import net.minecraft.server.MinecraftServer;
 
 import org.quiltmc.qsl.component.api.container.ComponentContainer;
-import org.quiltmc.qsl.component.api.provider.ComponentProvider;
+import org.quiltmc.qsl.component.api.ComponentProvider;
 import org.quiltmc.qsl.component.api.sync.SyncChannel;
 
 public final class Level implements ComponentProvider {

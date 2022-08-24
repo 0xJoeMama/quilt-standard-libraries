@@ -25,7 +25,11 @@ public interface NbtSerializable<T extends NbtElement> {
 	@SuppressWarnings("unchecked")
 	static void readFrom(NbtCompound root, NbtSerializable<?> nbtSerializable, Identifier id) {
 		NbtElement nbtTarget = root.get(id.toString());
-		switch (nbtSerializable.nbtType()) {
+		if (nbtTarget == null) {
+			return;
+		}
+
+		switch (nbtTarget.getType()) {
 			case NbtElement.BYTE_TYPE -> ((NbtSerializable<NbtByte>) nbtSerializable).read((NbtByte) nbtTarget);
 			case NbtElement.SHORT_TYPE -> ((NbtSerializable<NbtShort>) nbtSerializable).read((NbtShort) nbtTarget);
 			case NbtElement.INT_TYPE -> ((NbtSerializable<NbtInt>) nbtSerializable).read((NbtInt) nbtTarget);
@@ -38,7 +42,7 @@ public interface NbtSerializable<T extends NbtElement> {
 			case NbtElement.COMPOUND_TYPE -> ((NbtSerializable<NbtCompound>) nbtSerializable).read((NbtCompound) nbtTarget);
 			case NbtElement.INT_ARRAY_TYPE -> ((NbtSerializable<NbtIntArray>) nbtSerializable).read((NbtIntArray) nbtTarget);
 			case NbtElement.LONG_ARRAY_TYPE -> ((NbtSerializable<NbtLongArray>) nbtSerializable).read((NbtLongArray) nbtTarget);
-			default -> throw ErrorUtil.runtime("The nbt data type with id %D is not vanilla!", nbtSerializable.nbtType()).get();
+			default -> throw ErrorUtil.illegalArgument("The NBT data type with id %d is not vanilla!", nbtTarget.getType());
 		}
 	}
 
@@ -46,17 +50,10 @@ public interface NbtSerializable<T extends NbtElement> {
 		root.put(id.toString(), nbtSerializable.write());
 	}
 
-	byte nbtType();
-
 	void read(T nbt);
 
 	T write();
 
-	default void save() {
-		if (this.getSaveOperation() != null) {
-			this.getSaveOperation().run();
-		}
-	}
-
-	@Nullable Runnable getSaveOperation();
+	// TODO: @implNote: Make sure you tell people to override this method if their provider requires saving!!!!
+	default void save() { }
 }
