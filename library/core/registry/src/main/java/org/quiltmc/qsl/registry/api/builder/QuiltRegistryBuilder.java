@@ -9,23 +9,19 @@ import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.util.Holder;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.DefaultedRegistry;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.util.registry.SimpleRegistry;
 
 public final class QuiltRegistryBuilder<T> {
-	private final List<RegistryModule<T>> modules;
+	private final List<RegistryBuilderModule<T>> modules;
 	@Nullable
 	private Function<T, Holder.Reference<T>> holderProvider;
-	@Nullable
-	private Identifier defaultInstance;
 	private Lifecycle lifecycle;
 
 	private QuiltRegistryBuilder() {
 		this.modules = new ArrayList<>();
 		this.holderProvider = null;
-		this.defaultInstance = null;
 		this.lifecycle = Lifecycle.experimental();
 	}
 
@@ -33,18 +29,13 @@ public final class QuiltRegistryBuilder<T> {
 		return new QuiltRegistryBuilder<>();
 	}
 
-	public QuiltRegistryBuilder<T> addModule(RegistryModule<T> module) {
+	public QuiltRegistryBuilder<T> addModule(RegistryBuilderModule<T> module) {
 		this.modules.add(module);
 		return this;
 	}
 
 	public QuiltRegistryBuilder<T> holderProvider(Function<T, Holder.Reference<T>> holderProvider) {
 		this.holderProvider = holderProvider;
-		return this;
-	}
-
-	public QuiltRegistryBuilder<T> defaulted(Identifier defaultInstance) {
-		this.defaultInstance = defaultInstance;
 		return this;
 	}
 
@@ -56,22 +47,19 @@ public final class QuiltRegistryBuilder<T> {
 	@SuppressWarnings("unchecked")
 	public Registry<T> build(Identifier id) {
 		RegistryKey<Registry<T>> regKey = RegistryKey.ofRegistry(id);
-		SimpleRegistry<T> registry;
+		SimpleRegistry<T> registry = new SimpleRegistry<>(regKey, this.lifecycle, this.holderProvider);
 
-		if (this.defaultInstance != null) {
-			registry = new DefaultedRegistry<>(
-					this.defaultInstance.toString(),
-					regKey,
-					this.lifecycle,
-					this.holderProvider
-			);
-		} else {
-			registry = new SimpleRegistry<>(regKey, this.lifecycle, this.holderProvider);
+		for (var module : this.modules) {
+			registry = module.applyModule(registry, regKey, this.lifecycle, this.holderProvider, this.modules);
 		}
 
 		Registry.register((Registry<Registry<T>>) Registry.REGISTRIES, regKey, registry);
 
-		this.modules.forEach(module -> module.applyModule(registry));
 		return registry;
+	}
+
+	public interface RegistryFactory<T> {
+		SimpleRegistry<T> create(RegistryKey<Registry<T>> key, Lifecycle lifecycle,
+				Function<T, Holder.Reference<T>> holderProvider, List<RegistryBuilderModule<T>> modules);
 	}
 }
