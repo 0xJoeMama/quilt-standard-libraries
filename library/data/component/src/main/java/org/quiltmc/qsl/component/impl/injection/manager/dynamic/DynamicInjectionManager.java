@@ -27,7 +27,7 @@ import org.quiltmc.qsl.component.api.ComponentProvider;
 import org.quiltmc.qsl.component.api.injection.ComponentEntry;
 import org.quiltmc.qsl.component.impl.injection.manager.InjectionManager;
 
-public class DynamicInjectionManager extends InjectionManager<DynamicInjectionPredicate, DynamicInjectionManager.DynamicInjection> {
+public final class DynamicInjectionManager extends InjectionManager<DynamicInjectionPredicate, DynamicInjectionManager.DynamicInjection> {
 	@Override
 	public List<ComponentEntry<?>> getInjections(ComponentProvider provider) {
 		Class<? extends ComponentProvider> providerClass = provider.getClass();

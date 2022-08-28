@@ -21,7 +21,6 @@ import net.minecraft.util.Identifier;
 import org.quiltmc.qsl.component.impl.CommonInitializer;
 
 public final class PacketIds {
-	public static final Identifier TYPES = CommonInitializer.id("types");
 	public static final Identifier BLOCK_ENTITY_SYNC = CommonInitializer.id("block_entity");
 	public static final Identifier ENTITY_SYNC = CommonInitializer.id("entity");
 	public static final Identifier CHUNK_SYNC = CommonInitializer.id("chunk");

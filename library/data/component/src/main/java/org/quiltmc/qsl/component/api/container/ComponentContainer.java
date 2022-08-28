@@ -16,52 +16,17 @@
 
 package org.quiltmc.qsl.component.api.container;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.function.BiConsumer;
 
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.nbt.NbtCompound;
 
-import org.quiltmc.qsl.component.api.ComponentFactory;
-import org.quiltmc.qsl.component.api.ComponentType;
-import org.quiltmc.qsl.component.api.injection.ComponentEntry;
 import org.quiltmc.qsl.component.api.ComponentProvider;
-import org.quiltmc.qsl.component.api.sync.SyncChannel;
-import org.quiltmc.qsl.component.impl.ComponentsImpl;
+import org.quiltmc.qsl.component.api.ComponentType;
 
 public interface ComponentContainer {
-	ComponentContainer EMPTY = EmptyComponentContainer.INSTANCE;
-	ComponentContainer.Factory<EmptyComponentContainer> EMPTY_FACTORY = EmptyComponentContainer.FACTORY;
-	ComponentContainer.Factory<SimpleComponentContainer> SIMPLE_FACTORY = SimpleComponentContainer.FACTORY;
-	ComponentContainer.Factory<LazyComponentContainer> LAZY_FACTORY = LazyComponentContainer.FACTORY;
-
-	static <C> ComponentContainer.Factory<SingleComponentContainer<C>> createSingleFactory(ComponentType<C> type) {
-		return SingleComponentContainer.createFactory(new ComponentEntry<>(type));
-	}
-
-	static <C> ComponentContainer.Factory<SingleComponentContainer<C>> createSingleFactory(ComponentType<C> type,
-			ComponentFactory<C> factory) {
-		return SingleComponentContainer.createFactory(new ComponentEntry<>(type, factory));
-	}
-
-	static ComponentContainer createComposite(ComponentContainer main, ComponentContainer fallback) {
-		return new CompositeComponentContainer(main, fallback);
-	}
-
-	static Builder builder(Object obj) {
-		// TODO: Is there a way to avoid this instanceof check?
-		if (!(obj instanceof ComponentProvider provider)) {
-			throw new UnsupportedOperationException("Cannot create a container for a non-provider object");
-		}
-
-		return new Builder(provider);
-	}
-
 	@Nullable <C> C expose(ComponentType<C> type);
-
-	ComponentProvider getProvider();
 
 	void writeNbt(NbtCompound providerRootNbt);
 
@@ -72,85 +37,4 @@ public interface ComponentContainer {
 	void sync();
 
 	void forEach(BiConsumer<ComponentType<?>, ? super Object> action);
-
-	@FunctionalInterface
-	interface Factory<T extends ComponentContainer> {
-		T generate(ComponentProvider provider,
-				List<ComponentEntry<?>> entries,
-				@Nullable Runnable saveOperation,
-				boolean ticking,
-				@Nullable SyncChannel<?, ?> syncChannel
-		);
-	}
-
-	class Builder {
-		private final ComponentProvider provider;
-		private final List<ComponentEntry<?>> entries;
-		private boolean ticking;
-		@Nullable
-		private Runnable saveOperation;
-		@Nullable
-		private SyncChannel<?, ?> syncChannel;
-		private boolean acceptsInjections;
-
-		private Builder(ComponentProvider provider) {
-			this.provider = provider;
-			this.entries = new ArrayList<>();
-			this.acceptsInjections = false;
-			this.saveOperation = null;
-			this.syncChannel = null;
-		}
-
-		public Builder saving(Runnable saveOperation) {
-			this.saveOperation = saveOperation;
-			return this;
-		}
-
-		public Builder ticking() {
-			this.ticking = true;
-			return this;
-		}
-
-		public Builder syncing(SyncChannel<?, ?> syncChannel) {
-			this.syncChannel = syncChannel;
-			return this;
-		}
-
-		public <C> Builder add(ComponentEntry<C> componentEntry) {
-			this.entries.add(componentEntry);
-			return this;
-		}
-
-		public <C> Builder add(ComponentType<C> type) {
-			this.add(new ComponentEntry<>(type));
-			return this;
-		}
-
-		public <C> Builder add(ComponentType<C> type, ComponentFactory<C> factory) {
-			this.add(new ComponentEntry<>(type, factory));
-			return this;
-		}
-
-		public Builder add(ComponentType<?>... types) {
-			for (var type : types) {
-				this.add(type);
-			}
-
-			return this;
-		}
-
-		public Builder acceptsInjections() {
-			this.acceptsInjections = true;
-			return this;
-		}
-
-		public <T extends ComponentContainer> T build(ComponentContainer.Factory<T> factory) {
-			// TODO: See if we can cache the builder at some stage to reduce object creation.
-			if (this.acceptsInjections) {
-				this.entries.addAll(ComponentsImpl.getInjections(this.provider));
-			}
-
-			return factory.generate(this.provider, this.entries, this.saveOperation, this.ticking, this.syncChannel);
-		}
-	}
 }

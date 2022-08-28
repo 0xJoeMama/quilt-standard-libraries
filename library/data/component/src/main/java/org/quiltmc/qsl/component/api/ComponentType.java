@@ -16,6 +16,9 @@
 
 package org.quiltmc.qsl.component.api;
 
+import java.util.Objects;
+
+import com.mojang.serialization.Codec;
 import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.util.Identifier;
@@ -23,6 +26,7 @@ import net.minecraft.util.Identifier;
 import org.quiltmc.qsl.component.api.sync.codec.NetworkCodec;
 
 public record ComponentType<T>(Class<T> componentClass, boolean isInstant) {
+	public static final Codec<ComponentType<?>> CODEC = Components.REGISTRY.getCodec();
 	// the component type registry is synced, so we need not worry about desyncs
 	public static final NetworkCodec<ComponentType<?>> NETWORK_CODEC = NetworkCodec.idIndexed(Components.REGISTRY);
 
@@ -33,6 +37,6 @@ public record ComponentType<T>(Class<T> componentClass, boolean isInstant) {
 
 	@NotNull
 	public Identifier id() {
-		return Components.REGISTRY.getId(this);
+		return Objects.requireNonNull(Components.REGISTRY.getId(this), "ComponentType %s was not registered!".formatted(this));
 	}
 }

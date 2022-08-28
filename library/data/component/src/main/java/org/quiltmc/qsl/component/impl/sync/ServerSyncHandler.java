@@ -18,29 +18,15 @@ package org.quiltmc.qsl.component.impl.sync;
 
 import org.quiltmc.qsl.component.api.sync.SyncChannel;
 import org.quiltmc.qsl.component.impl.ComponentsImpl;
-import org.quiltmc.qsl.networking.api.ServerPlayNetworking;
 
 public final class ServerSyncHandler {
-	private static ServerSyncHandler INSTANCE = null;
-
 	private ServerSyncHandler() { }
 
-	public static ServerSyncHandler getInstance() {
-		if (INSTANCE == null) {
-			INSTANCE = new ServerSyncHandler();
-		}
-
-		return INSTANCE;
-	}
-
-	public void registerChannel(SyncChannel<?, ?> syncChannel) {
+	public static void registerChannel(SyncChannel<?, ?> syncChannel) {
 		ComponentsImpl.LOGGER.info("Registering server-side component sync channel with id {}", syncChannel.getChannelId());
-		ServerPlayNetworking.registerGlobalReceiver(syncChannel.getChannelId(), (server, sender, handler, buf, responseSender) ->
-				syncChannel.handleClientSyncRequest(server, sender, buf)
-		);
 	}
 
-	public void registerPackets() {
-		SyncChannel.createPacketChannels(this::registerChannel);
+	public static void registerPackets() {
+		SyncChannel.createPacketChannels(ServerSyncHandler::registerChannel);
 	}
 }

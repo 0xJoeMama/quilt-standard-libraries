@@ -25,33 +25,16 @@ import org.quiltmc.qsl.component.impl.client.sync.ClientSyncHandler;
 import org.quiltmc.qsl.component.impl.event.ClientEventListener;
 import org.quiltmc.qsl.component.impl.event.ComponentEventPhases;
 import org.quiltmc.qsl.lifecycle.api.client.event.ClientLifecycleEvents;
-import org.quiltmc.qsl.lifecycle.api.client.event.ClientTickEvents;
-import org.quiltmc.qsl.networking.api.client.ClientPlayConnectionEvents;
 
 @Environment(EnvType.CLIENT)
 public class ClientInitializer implements ClientModInitializer {
 	@Override
 	public void onInitializeClient(ModContainer mod) {
-		ClientSyncHandler.getInstance().registerPackets();
+		ClientSyncHandler.registerPackets();
 
 		ClientLifecycleEvents.READY.register(
 				ComponentEventPhases.FREEZE_COMPONENT_REGISTRIES,
 				ClientEventListener::onClientReady
-		);
-
-		ClientPlayConnectionEvents.JOIN.register(
-				ComponentEventPhases.UNFREEZE_COMPONENT_NETWORK,
-				ClientEventListener::onServerJoin
-		);
-
-		ClientPlayConnectionEvents.DISCONNECT.register(
-				ComponentEventPhases.FREEZE_COMPONENT_NETWORK,
-				ClientEventListener::onServerDisconnect
-		);
-
-		ClientTickEvents.END.register(
-				ComponentEventPhases.CLIENT_REQUEST_POLL,
-				ClientEventListener::onClientTick
 		);
 	}
 }

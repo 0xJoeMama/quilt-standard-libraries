@@ -31,7 +31,6 @@ import net.minecraft.util.registry.SimpleRegistry;
 
 import org.quiltmc.qsl.component.api.ComponentProvider;
 import org.quiltmc.qsl.component.api.ComponentType;
-import org.quiltmc.qsl.component.api.container.ComponentContainer;
 import org.quiltmc.qsl.component.api.injection.ComponentEntry;
 import org.quiltmc.qsl.component.api.injection.predicate.DynamicInjectionPredicate;
 import org.quiltmc.qsl.component.api.injection.predicate.InjectionPredicate;
@@ -49,11 +48,6 @@ public class ComponentsImpl {
 	public static final DynamicInjectionManager DYNAMIC_MANAGER = new DynamicInjectionManager();
 
 	public static final Logger LOGGER = LoggerFactory.getLogger("Quilt Component");
-	public static final ComponentContainer.Factory<?> DEFAULT_FACTORY =
-			(provider, entries, saveOperation, ticking, syncChannel) ->
-					entries.isEmpty() ?
-					ComponentContainer.EMPTY :
-					ComponentContainer.LAZY_FACTORY.generate(provider, entries, saveOperation, ticking, syncChannel);
 
 	public static void inject(InjectionPredicate predicate, ComponentEntry<?>... entries) {
 		if (predicate instanceof DynamicInjectionPredicate dynamicPredicate) {

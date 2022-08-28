@@ -20,7 +20,7 @@ import java.util.function.Supplier;
 
 public class ErrorUtil {
 	public static IllegalArgumentException illegalArgument(String message, Object... args) {
-		return () -> new IllegalArgumentException(message.formatted(args));
+		return new IllegalArgumentException(message.formatted(args));
 	}
 
 	public static Supplier<IllegalStateException> illegalState(String message) {

@@ -24,7 +24,7 @@ public interface ComponentFactory<T> {
 
 	interface ForGeneric<T, P> extends ComponentFactory<T> {
 		@SuppressWarnings("unchecked")
-		default T create(ComponentProvider provider) {
+		default @NotNull T create(ComponentProvider provider) {
 			return this.generate((P) provider);
 		}
 

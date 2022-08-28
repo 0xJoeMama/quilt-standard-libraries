@@ -48,7 +48,7 @@ public class ComponentInjector<T extends ComponentProvider> {
 		this.entries = new ArrayList<>();
 	}
 
-	public static <T extends ComponentProvider> ComponentInjector<T> injector(Class<?> clazz) {
+	public static <T extends ComponentProvider> ComponentInjector<T> injector(Class<T> clazz) {
 		Class<T> properClass = ComponentInjector.asProvider(clazz);
 
 		if (properClass == null) {
@@ -113,7 +113,7 @@ public class ComponentInjector<T extends ComponentProvider> {
 			this.type = type;
 		}
 
-		public EntryBuilder<E> factory(ComponentFactory<E> factory) {
+		public EntryBuilder<E> factory(ComponentFactory.ForGeneric<E, T> factory) {
 			this.factory = factory;
 			return this;
 		}

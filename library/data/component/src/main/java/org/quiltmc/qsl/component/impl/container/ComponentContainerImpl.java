@@ -1,10 +1,11 @@
 package org.quiltmc.qsl.component.impl.container;
 
-import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.IdentityHashMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.nbt.NbtCompound;
@@ -15,19 +16,22 @@ import org.quiltmc.qsl.component.api.ComponentType;
 import org.quiltmc.qsl.component.api.Components;
 import org.quiltmc.qsl.component.api.container.ComponentContainer;
 import org.quiltmc.qsl.component.api.injection.ComponentEntry;
+import org.quiltmc.qsl.component.api.sync.SyncChannel;
+import org.quiltmc.qsl.component.impl.util.StringConstants;
 
 public class ComponentContainerImpl implements ComponentContainer {
+	@NotNull
 	private final ComponentProvider provider;
 	private final Map<ComponentType<?>, ComponentInstance<?>> components;
 
-	public ComponentContainerImpl(ComponentProvider provider, Iterable<ComponentEntry<?>> entries) {
+	public ComponentContainerImpl(@NotNull ComponentProvider provider, Iterable<ComponentEntry<?>> entries) {
 		this.provider = provider;
 
 		var componentMap = new IdentityHashMap<ComponentType<?>, ComponentInstance<?>>();
 		for (var entry : entries) {
 			componentMap.computeIfAbsent(entry.type(), type -> new ComponentInstance<>(
-					entry.factory(),
 					this.provider,
+					entry.factory(),
 					type.isInstant()
 			));
 		}
@@ -41,18 +45,16 @@ public class ComponentContainerImpl implements ComponentContainer {
 	}
 
 	@Override
-	public ComponentProvider getProvider() {
-		return this.provider;
-	}
-
-	@Override
 	public void writeNbt(NbtCompound providerRootNbt) {
-		this.forEachInitialized((componentType, instance) -> instance.writeNbt(componentType, providerRootNbt));
+		var rootQslNbt = new NbtCompound();
+		this.forEachInitialized((componentType, instance) -> instance.writeNbt(componentType, rootQslNbt));
+		providerRootNbt.put(StringConstants.COMPONENT_ROOT, rootQslNbt);
 	}
 
 	@Override
 	public void readNbt(NbtCompound providerRootNbt) {
-		for (String key : providerRootNbt.getKeys()) {
+		var rootQslNbt = providerRootNbt.getCompound(StringConstants.COMPONENT_ROOT);
+		for (String key : rootQslNbt.getKeys()) {
 			var id = Identifier.tryParse(key);
 			if (id == null) continue;
 
@@ -73,15 +75,17 @@ public class ComponentContainerImpl implements ComponentContainer {
 
 	@Override
 	public void sync() {
-		var queue = new ArrayDeque<ComponentType<?>>(this.components.size() / 3);
+		SyncChannel<?, ?> syncChannel = this.provider.getSyncChannel();
 
-		for (var entry : this.components.entrySet()) {
-			if (entry.getValue().needsSync()) {
-				queue.add(entry.getKey());
-			}
+		if (syncChannel != null) {
+			var queue = new ArrayList<ComponentType<?>>(2);
+			this.forEachInitialized((type, instance) -> {
+				if (instance.needsSync()) {
+					queue.add(type);
+				}
+			});
+			syncChannel.sync(queue, this.provider);
 		}
-
-		this.provider.getSyncChannel().syncFromQueue(queue, this.provider);
 	}
 
 	@Override

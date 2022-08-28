@@ -49,9 +49,9 @@ public final class ClientResolution {
 		return MinecraftClient.getInstance().world;
 	}
 
-	public static ComponentProvider level() {
-		return MinecraftClient.getInstance();
-	}
+//	public static ComponentProvider level() {
+//		return MinecraftClient.getInstance();
+//	}
 
 	public static Chunk chunk(int chunkX, int chunkZ) {
 		return MinecraftClient.getInstance().world.getChunk(chunkX, chunkZ);

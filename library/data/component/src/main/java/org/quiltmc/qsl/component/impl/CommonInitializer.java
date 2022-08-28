@@ -48,12 +48,7 @@ public final class CommonInitializer implements ModInitializer {
 		Registry.register((Registry<Registry<?>>) Registry.REGISTRIES, id("components"), Components.REGISTRY);
 		RegistrySynchronization.markForSync(ComponentsImpl.REGISTRY);
 
-		ServerSyncHandler.getInstance().registerPackets();
-
-		ServerLoginConnectionEvents.QUERY_START.register(
-				ComponentEventPhases.SYNC_COMPONENT_REGISTRY,
-				CommonEventListener::onQueryStart
-		);
+		ServerSyncHandler.registerPackets();
 
 		ServerLifecycleEvents.STARTING.register(
 				ComponentEventPhases.FREEZE_COMPONENT_REGISTRIES,

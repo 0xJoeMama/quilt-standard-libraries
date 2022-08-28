@@ -19,21 +19,22 @@ public final class ComponentInstance<T> {
 	private static final byte TICK = 1 << 2;
 	private static final byte SYNC = 1 << 3;
 
-	@NotNull
-	private final ComponentFactory<T> factory;
+
 	@NotNull
 	private final ComponentProvider provider;
+	@NotNull
+	private final ComponentFactory<T> factory;
 	@Nullable
 	private T component;
 	private byte flags;
 
 	public ComponentInstance(
-			@NotNull ComponentFactory<T> factory,
 			@NotNull ComponentProvider provider,
+			@NotNull ComponentFactory<T> factory,
 			boolean instaInit
 	) {
-		this.factory = factory;
 		this.provider = provider;
+		this.factory = factory;
 		this.component = null;
 		this.flags = 0;
 
@@ -63,8 +64,6 @@ public final class ComponentInstance<T> {
 	}
 
 	public void readNbt(ComponentType<?> type, NbtCompound providerRootNbt) {
-		this.ensureInitialized();
-
 		if ((this.flags & NBT) != 0) {
 			NbtSerializable.readFrom(providerRootNbt, (NbtSerializable<?>) this.component, type.id());
 		}

@@ -18,7 +18,6 @@ package org.quiltmc.qsl.component.api.component;
 
 import net.minecraft.nbt.*;
 import net.minecraft.util.Identifier;
-import org.jetbrains.annotations.Nullable;
 import org.quiltmc.qsl.component.impl.util.ErrorUtil;
 
 public interface NbtSerializable<T extends NbtElement> {
