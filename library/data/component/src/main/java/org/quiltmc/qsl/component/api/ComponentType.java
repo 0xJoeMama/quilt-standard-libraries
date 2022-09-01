@@ -32,7 +32,7 @@ public record ComponentType<T>(Class<T> componentClass, boolean isInstant) {
 
 	@SuppressWarnings("unchecked")
 	public T cast(Object component) {
-		return ((T) component);
+		return (T) component;
 	}
 
 	@NotNull

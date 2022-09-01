@@ -27,7 +27,6 @@ import java.util.stream.Stream;
 
 import net.minecraft.util.Util;
 
-import org.quiltmc.qsl.component.api.Components;
 import org.quiltmc.qsl.component.api.injection.ComponentEntry;
 import org.quiltmc.qsl.component.api.injection.predicate.InjectionPredicate;
 import org.quiltmc.qsl.component.api.ComponentProvider;
@@ -40,14 +39,6 @@ public abstract class InjectionManager<P extends InjectionPredicate, I> {
 	// When a type collides, one of the two variants will override the other one.
 	// That would mean only the last added type, will ever be properly processed.
 	public void inject(P predicate, ComponentEntry<?>... entries) {
-		for (ComponentEntry<?> entry : entries) {
-			var type = entry.type();
-
-			if (Components.REGISTRY.get(type.id()) == null) {
-				throw ErrorUtil.illegalArgument("The target id %s does not match any registered component", type);
-			}
-		}
-
 		var targetBucket = this.injections.computeIfAbsent(predicate, p -> new ArrayList<>());
 		Collections.addAll(targetBucket, entries);
 

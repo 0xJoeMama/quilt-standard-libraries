@@ -49,7 +49,7 @@ public class ComponentInjector<T extends ComponentProvider> {
 	}
 
 	public static <T extends ComponentProvider> ComponentInjector<T> injector(Class<T> clazz) {
-		Class<T> properClass = ComponentInjector.asProvider(clazz);
+		Class<T> properClass = asProvider(clazz);
 
 		if (properClass == null) {
 			throw ErrorUtil.illegalArgument("Class %s is not a ComponentProvider implementor!", clazz);
@@ -59,7 +59,7 @@ public class ComponentInjector<T extends ComponentProvider> {
 	}
 
 	@SuppressWarnings("unchecked")
-	// FIXME: Might have broken!
+	// FIXME: Find a way to remove the reflection!
 	public static <T extends ComponentProvider> Class<T> asProvider(Class<?> tested) {
 		return cache.computeIfAbsent(tested, clazz -> {
 			var currClass = (Class<?>) clazz;
